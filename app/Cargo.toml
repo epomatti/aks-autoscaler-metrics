@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 actix-web = "3"
-dotenv = ">=0.15.0"
+dotenv = "*"
+dotenv_codegen = "*"

@@ -1,7 +1,9 @@
 extern crate dotenv;
 
+#[macro_use]
+extern crate dotenv_codegen;
+
 use dotenv::dotenv;
-use std::env;
 use std::io;
 
 use actix_web::{get, App, HttpResponse, HttpServer, Responder};
@@ -14,20 +16,12 @@ async fn hello() -> impl Responder {
 #[actix_web::main]
 async fn main() -> io::Result<()> {
   dotenv().ok();
-  let hostKey = "HOST";
-  match env::var(hostKey) {
-    Ok(val) => let host = val,
-    Err(e) => println!("couldn't interpret {hostKey}: {e}"),
-  }
 
-  let port = env::var("PORT");
-
-  println!(host);
-
-  let bind = format!("{}:{}", host, port);
+  let host = dotenv!("BINDING_HOST");
+  let port = dotenv!("BINDING_PORT");
 
   HttpServer::new(|| App::new().service(hello))
-    .bind("0.0.0.0:8080")?
+    .bind(format!("{host}:{port}"))?
     .run()
     .await
 }
