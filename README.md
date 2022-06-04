@@ -1,6 +1,6 @@
 # AKS Metrics
 
-Observability for AKS with Terraform with the following logging and metrics configuration:
+Observability and Auto Scaling for AKS with Terraform with the following logging and metrics configuration:
 
 - Log Analytics Workspace
 - OMS Agent
