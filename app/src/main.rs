@@ -3,10 +3,14 @@ extern crate dotenv;
 #[macro_use]
 extern crate dotenv_codegen;
 
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
+use actix_web::{error, get, post, web, App, HttpServer, Responder, Result};
+use derive_more::{Display, Error};
 use dotenv::dotenv;
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::io;
+
+// Get Icecream
 
 #[derive(Serialize)]
 struct GetIceCreamResponse {
@@ -16,20 +20,48 @@ struct GetIceCreamResponse {
 #[get("/api/icecream/{qty}")]
 async fn get_ice_cream(path: web::Path<usize>) -> Result<impl Responder> {
   let qty = path.into_inner();
-  let icecream = GetIceCreamResponse {
+  let body = GetIceCreamResponse {
     icecream: "🍨".repeat(qty),
   };
-  Ok(web::Json(icecream))
+  Ok(web::Json(body))
 }
 
-#[post("/")]
-async fn post_ice_cream() -> impl Responder {
-  HttpResponse::Ok().body("Hello, world!")
+// Post Ice Cream
+
+#[derive(Deserialize)]
+struct PostIceCreamRequest {
+  icecream: String,
 }
 
-// async fn index(icecream: web::Json<IceCream>) -> Result<String> {
-//   Ok(format!("Welcome {}!", icecream.icecream))
-// }
+#[derive(Serialize)]
+struct PostIceCreamResponse {
+  message: String,
+}
+
+#[derive(Debug, Display, Error)]
+#[display(fmt = "{}", name)]
+struct MyError {
+  name: &'static str,
+}
+
+impl error::ResponseError for MyError {}
+
+#[post("/api/icecream")]
+async fn post_ice_cream(body: web::Json<PostIceCreamRequest>) -> Result<impl Responder, MyError> {
+  let icecream = body.into_inner().icecream;
+  let re = Regex::new(r"[🍨]").unwrap();
+  let is_match = re.is_match(icecream.as_str());
+  if !is_match {
+    return Err(MyError { name: "Sorry, we only accept 🍨" });
+  }
+  let count = icecream.as_str().chars().count();
+  let response = PostIceCreamResponse {
+    message: format!("You have {count} 🍨!"),
+  };
+  Ok(web::Json(response))
+}
+
+// Server
 
 #[actix_web::main]
 async fn main() -> io::Result<()> {
