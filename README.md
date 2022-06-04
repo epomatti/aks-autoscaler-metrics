@@ -93,6 +93,6 @@ docker run -it -p 8080:8080 --rm --name icecream icecream
 ## Reference
 
 ```
-https://docs.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-onboard
 https://docs.microsoft.com/en-us/azure/aks/monitor-aks
+https://docs.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-onboard
 ```
