@@ -10,11 +10,9 @@ Observability for AKS with Terraform with the following logging and metrics conf
 
 ## Deploy
 
-Start in `cd infrastructure`:
-
 ```sh
 terraform init
-terraform apply -auto-approve
+terraform apply -chdir='infrastructure' -auto-approve
 ```
 
 Once done get the credentials:
@@ -36,7 +34,7 @@ kubectl get deployment omsagent-rs -n=kube-system
 Set Container Insights to use ContainerLogV2:
 
 ```sh
-kubectl apply -f ../container-azm-ms-agentconfig.yaml
+kubectl apply -f container-azm-ms-agentconfig.yaml
 ```
 
 Setup ContainerLogV2 to [Basic Logs](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/basic-logs-configure?tabs=portal-1%2Cportal-2) to save costs.
@@ -48,13 +46,24 @@ az monitor log-analytics workspace table update --resource-group 'rg-icecream'  
 Deploy to Kubernetes:
 
 ```sh
-kubectl apply -f ../kubernetes.yaml
+kubectl apply -f kubernetes.yaml
 ```
 
 Service should be running on the external address:
 
 ```sh
 curl 'http://<CLUSTER_EXTERNAL_IP>:30000/api/icecream/5'
+```
+
+To load test it with K6:
+
+```sh
+docker run \
+  -e "CLUSTER_EXTERNAL_IP=<EXTERNAL_IP>" \
+  -e "VUs=5" \
+  -e "DURATION=30s" \
+  -e "API=/api/icecream/factorial/20" \
+  --rm -i grafana/k6 run - <k6.js
 ```
 
 
