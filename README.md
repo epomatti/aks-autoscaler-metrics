@@ -1,26 +1,28 @@
 # AKS Metrics
 
-This an AKS setup with Terraform with the following logging and metrics configuration:
+Observability for AKS with Terraform with the following logging and metrics configuration:
 
 - Log Analytics Workspace
 - OMS Agent
 - Container Insights
 - Monitoring Metrics Publisher
 
+## Deploy
 
-Metrics with AKS:
+Start in `cd infrastructure`:
 
-Enabling Container Insights: https://docs.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-onboard
+```sh
+terraform init
+terraform apply -auto-approve
+```
 
-Reference: https://docs.microsoft.com/en-us/azure/aks/monitor-aks
-
-### Deploy
-
+Once done get the credentials:
 
 ```sh
 az aks get-credentials -n aks-icecream -g rg-icecream
 ```
 
+Test the metrics components:
 
 ```sh
 # Confirm agent deployment
@@ -30,12 +32,12 @@ kubectl get ds omsagent --namespace=kube-system
 kubectl get deployment omsagent-rs -n=kube-system
 ```
 
-```sh
-curl http://localhost:8080/api/icecream/5
-```
 
 
-### App Development
+
+
+
+## App Development
 
 Make sure you're in the app directory:
 
@@ -56,8 +58,11 @@ cargo build
 cargo run
 ```
 
+Test the app:
 
-cargo build --release
+```sh
+curl 'http://localhost:8080/api/icecream/5'
+```
 
 
 ### With Docker
@@ -65,4 +70,11 @@ cargo build --release
 ```sh
 docker build -t icecream .
 docker run -it -p 8080:8080 --rm --name icecream icecream 
+```
+
+## Reference
+
+```
+https://docs.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-onboard
+https://docs.microsoft.com/en-us/azure/aks/monitor-aks
 ```
