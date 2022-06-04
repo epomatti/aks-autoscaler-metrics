@@ -93,6 +93,12 @@ resource "azurerm_kubernetes_cluster" "default" {
   identity {
     type = "SystemAssigned"
   }
+
+  lifecycle {
+    ignore_changes = [
+      default_node_pool[0].node_count
+    ]
+  }
 }
 
 # Update Container insights to enable metrics

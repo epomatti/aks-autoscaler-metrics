@@ -12,7 +12,7 @@ Observability for AKS with Terraform with the following logging and metrics conf
 
 ```sh
 terraform init
-terraform apply -chdir='infrastructure' -auto-approve
+terraform -chdir='infrastructure' apply -auto-approve
 ```
 
 Once done get the credentials:
@@ -63,7 +63,7 @@ docker run \
   -e "VUS=100" \
   -e "DURATION=30s" \
   -e "K6_SLEEP=0" \
-  -e "API=/api/icecream/factorial/20" \
+  -e "API=/api/icecream/factorial/33" \
   --rm -i grafana/k6 run - <k6.js
 ```
 
