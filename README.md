@@ -30,6 +30,10 @@ kubectl get ds omsagent --namespace=kube-system
 kubectl get deployment omsagent-rs -n=kube-system
 ```
 
+```sh
+curl http://localhost:8080/api/icecream/5
+```
+
 
 ### App Development
 
@@ -56,7 +60,9 @@ cargo run
 cargo build --release
 
 
+### With Docker
 
-
-
-
+```sh
+docker build -t icecream .
+docker run -it -p 8080:8080 --rm --name icecream icecream 
+```
