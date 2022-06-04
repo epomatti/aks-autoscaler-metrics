@@ -41,6 +41,9 @@ kubectl apply -f ../container-azm-ms-agentconfig.yaml
 
 Setup ContainerLogV2 to [Basic Logs](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/basic-logs-configure?tabs=portal-1%2Cportal-2) to save costs.
 
+```sh
+az monitor log-analytics workspace table update --resource-group 'rg-icecream'  --workspace-name 'log-icecream' --name 'ContainerLogV2'  --plan 'Basic'
+```
 
 Deploy to Kubernetes:
 
