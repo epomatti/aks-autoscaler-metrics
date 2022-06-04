@@ -6,6 +6,7 @@ Observability for AKS with Terraform with the following logging and metrics conf
 - OMS Agent
 - Container Insights
 - Monitoring Metrics Publisher
+- ContainerLogV2
 
 ## Deploy
 
@@ -31,6 +32,15 @@ kubectl get ds omsagent --namespace=kube-system
 # Confirm solution deployment
 kubectl get deployment omsagent-rs -n=kube-system
 ```
+
+Set Container Insights to use ContainerLogV2:
+
+```sh
+kubectl apply -f ../container-azm-ms-agentconfig.yaml
+```
+
+Setup ContainerLogV2 to [Basic Logs](https://docs.microsoft.com/en-us/azure/azure-monitor/logs/basic-logs-configure?tabs=portal-1%2Cportal-2) to save costs.
+
 
 Deploy to Kubernetes:
 
