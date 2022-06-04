@@ -32,9 +32,17 @@ kubectl get ds omsagent --namespace=kube-system
 kubectl get deployment omsagent-rs -n=kube-system
 ```
 
+Deploy to Kubernetes:
 
+```sh
+kubectl apply -f ../kubernetes.yaml
+```
 
+Service should be running on the external address:
 
+```sh
+curl 'http://<CLUSTER_EXTERNAL_IP>:30000/api/icecream/5'
+```
 
 
 ## App Development
