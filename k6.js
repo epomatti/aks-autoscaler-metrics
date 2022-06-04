@@ -6,5 +6,5 @@ export const options = {
 };
 export default function () {
   http.get(`http://${__ENV.CLUSTER_EXTERNAL_IP}:30000${__ENV.API}`);
-  sleep(1);
+  sleep(__ENV.K6_SLEEP);
 }

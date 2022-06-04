@@ -60,8 +60,9 @@ To load test it with K6:
 ```sh
 docker run \
   -e "CLUSTER_EXTERNAL_IP=<EXTERNAL_IP>" \
-  -e "VUs=5" \
+  -e "VUS=100" \
   -e "DURATION=30s" \
+  -e "K6_SLEEP=0" \
   -e "API=/api/icecream/factorial/20" \
   --rm -i grafana/k6 run - <k6.js
 ```
