@@ -76,13 +76,15 @@ struct GetIceCreamFactorialResponse {
 }
 
 #[get("/api/icecream/factorial/{qty}")]
-async fn get_ice_cream_factorial(path: web::Path<u64>) -> Result<impl Responder> {
-  let qty: u64 = path.into_inner();
-  let product = qty.factorial();
+async fn get_ice_cream_factorial(path: web::Path<String>) -> Result<impl Responder> {
+  let qty: String = path.into_inner();
+  let qty_num: u128 = qty.parse().unwrap();
+  let product = qty_num.factorial();
   let results = product.to_string();
   let body = GetIceCreamFactorialResponse { icecreams: results };
   Ok(web::Json(body))
 }
+
 
 // Server
 
