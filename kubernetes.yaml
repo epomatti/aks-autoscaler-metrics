@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: icecream-deployment
+  labels:
+    app: icecream
+spec:
+  selector:
+    matchLabels:
+      app: icecream
+  template:
+    metadata:
+      labels:
+        app: icecream
+    spec:
+      containers:
+        - name: icecream-container
+          image: epomatti/icecream:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: icecream-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: icecream
+  ports:
+    - protocol: TCP
+      port: 30000
+      targetPort: 8080
