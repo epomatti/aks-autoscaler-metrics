@@ -3,7 +3,7 @@ extern crate dotenv;
 #[macro_use]
 extern crate dotenv_codegen;
 
-use actix_web::{error, get, post, web, App, HttpServer, Responder, Result};
+use actix_web::{error, get, http::StatusCode, post, web, App, HttpServer, Responder, Result};
 use derive_more::{Display, Error};
 use dotenv::dotenv;
 use regex::Regex;
@@ -39,12 +39,16 @@ struct PostIceCreamResponse {
 }
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "{}", name)]
+#[display(fmt = "{}", message)]
 struct MyError {
-  name: &'static str,
+  message: &'static str,
 }
 
-impl error::ResponseError for MyError {}
+impl error::ResponseError for MyError {
+  fn status_code(&self) -> StatusCode {
+    StatusCode::BAD_REQUEST
+  }
+}
 
 #[post("/api/icecream")]
 async fn post_ice_cream(body: web::Json<PostIceCreamRequest>) -> Result<impl Responder, MyError> {
@@ -52,7 +56,9 @@ async fn post_ice_cream(body: web::Json<PostIceCreamRequest>) -> Result<impl Res
   let re = Regex::new(r"[🍨]").unwrap();
   let is_match = re.is_match(icecream.as_str());
   if !is_match {
-    return Err(MyError { name: "Sorry, we only accept 🍨" });
+    return Err(MyError {
+      message: "Sorry, we only accept 🍨",
+    });
   }
   let count = icecream.as_str().chars().count();
   let response = PostIceCreamResponse {

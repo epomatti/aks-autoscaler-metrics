@@ -14,18 +14,13 @@ Enabling Container Insights: https://docs.microsoft.com/en-us/azure/azure-monito
 
 Reference: https://docs.microsoft.com/en-us/azure/aks/monitor-aks
 
+### Deploy
+
+
 ```sh
-cargo build
-cargo run
+az aks get-credentials -n aks-icecream -g rg-icecream
 ```
 
-
-cargo build --release
-
-az aks get-credentials -n aks-icecream -g rg-icecream
-
-
-###
 
 ```sh
 # Confirm agent deployment
@@ -34,3 +29,34 @@ kubectl get ds omsagent --namespace=kube-system
 # Confirm solution deployment
 kubectl get deployment omsagent-rs -n=kube-system
 ```
+
+
+### App Development
+
+Make sure you're in the app directory:
+
+```sh
+cd app
+```
+
+Set up the local environment:
+
+```sh
+cp config/example.env .env
+```
+
+Start the Rust server:
+
+```sh
+cargo build
+cargo run
+```
+
+
+cargo build --release
+
+
+
+
+
+
