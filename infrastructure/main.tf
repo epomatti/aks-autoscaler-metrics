@@ -30,7 +30,7 @@ variable "location" {
 variable "aks_vm_size" {
   description = "Kubernetes VM size"
   type        = string
-  default     = "Standard_B2ms"
+  default     = "Standard_B2s"
   sensitive   = false
 }
 
