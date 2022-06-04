@@ -6,6 +6,7 @@ extern crate dotenv_codegen;
 use actix_web::{error, get, http::StatusCode, post, web, App, HttpServer, Responder, Result};
 use derive_more::{Display, Error};
 use dotenv::dotenv;
+use factorial::Factorial;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::io;
@@ -67,6 +68,22 @@ async fn post_ice_cream(body: web::Json<PostIceCreamRequest>) -> Result<impl Res
   Ok(web::Json(response))
 }
 
+// Factorial
+
+#[derive(Serialize)]
+struct GetIceCreamFactorialResponse {
+  icecreams: String,
+}
+
+#[get("/api/icecream/factorial/{qty}")]
+async fn get_ice_cream_factorial(path: web::Path<u64>) -> Result<impl Responder> {
+  let qty: u64 = path.into_inner();
+  let product = qty.factorial();
+  let results = product.to_string();
+  let body = GetIceCreamFactorialResponse { icecreams: results };
+  Ok(web::Json(body))
+}
+
 // Server
 
 #[actix_web::main]
@@ -76,8 +93,13 @@ async fn main() -> io::Result<()> {
   let host = dotenv!("BINDING_HOST");
   let port = dotenv!("BINDING_PORT");
 
-  HttpServer::new(|| App::new().service(get_ice_cream).service(post_ice_cream))
-    .bind(format!("{host}:{port}"))?
-    .run()
-    .await
+  HttpServer::new(|| {
+    App::new()
+      .service(get_ice_cream)
+      .service(post_ice_cream)
+      .service(get_ice_cream_factorial)
+  })
+  .bind(format!("{host}:{port}"))?
+  .run()
+  .await
 }
