@@ -29,7 +29,7 @@ spec:
     kind: Deployment
     name: icecream-deployment
   minReplicas: 1
-  maxReplicas: 3
+  maxReplicas: 10
   metrics:
     - type: Resource
       resource:

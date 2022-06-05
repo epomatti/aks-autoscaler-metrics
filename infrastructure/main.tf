@@ -82,12 +82,13 @@ resource "azurerm_log_analytics_workspace" "default" {
 # AKS
 
 resource "azurerm_kubernetes_cluster" "default" {
-  name                = "aks-${local.workload_affix}"
-  location            = azurerm_resource_group.default.location
-  resource_group_name = azurerm_resource_group.default.name
-  dns_prefix          = "cluster"
-  node_resource_group = "k8s-aks-${local.workload_affix}"
-  kubernetes_version  = "1.23.5"
+  name                      = "aks-${local.workload_affix}"
+  location                  = azurerm_resource_group.default.location
+  resource_group_name       = azurerm_resource_group.default.name
+  dns_prefix                = "cluster"
+  node_resource_group       = "k8s-aks-${local.workload_affix}"
+  automatic_channel_upgrade = "rapid"
+  kubernetes_version        = "1.23.5"
 
   oms_agent {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.default.id
