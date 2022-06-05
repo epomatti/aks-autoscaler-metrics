@@ -15,7 +15,7 @@ Container Insights live dashboard:
 ## Deploy
 
 ```sh
-terraform init
+terraform -chdir='infrastructure' init
 terraform -chdir='infrastructure' apply -auto-approve
 ```
 
@@ -59,7 +59,11 @@ Service should be running on the external address:
 curl 'http://<CLUSTER_EXTERNAL_IP>:30000/api/icecream/5'
 ```
 
-Quickly force image pull if required:
+That's it 👍 services should be ready for load testing.
+
+---
+
+If required, quickly force image pull:
 
 ```sh
 kubectl rollout restart deployment/icecream-deployment
@@ -71,6 +75,11 @@ Check auto scaler status:
 
 ```
 kubectl describe configmap --namespace kube-system cluster-autoscaler-status
+
+kubectl get configmap -n kube-system cluster-autoscaler-status -o yaml
+
+AzureDiagnostics
+| where Category == "cluster-autoscaler"
 ```
 
 To load test it with K6 on Docker:
@@ -148,4 +157,5 @@ docker run -it -p 8080:8080 --rm --name icecream icecream
 ```
 https://docs.microsoft.com/en-us/azure/aks/monitor-aks
 https://docs.microsoft.com/en-us/azure/azure-monitor/containers/container-insights-onboard
+https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-scale?tabs=azure-cli
 ```
