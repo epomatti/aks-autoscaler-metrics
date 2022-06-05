@@ -82,7 +82,7 @@ $env:API="/api/icecream/factorial/33"
 $env:DURATION="30s"
 $env:K6_SLEEP=0
 
-.\k6 run --vus 10 --duration 30s script.js
+.\k6 run k6.js
 ```
 
 Also with JMeter (I was having bandwidth issues with WSL for some reason):
