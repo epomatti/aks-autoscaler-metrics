@@ -64,7 +64,7 @@ That's it 👍 services should be ready for load testing.
 
 ## Auto Scaling Load Testing
 
-Check auto scaler status:
+Check autoscaler status:
 
 ```
 kubectl describe configmap --namespace kube-system cluster-autoscaler-status
@@ -85,13 +85,13 @@ docker run \
   --rm -i grafana/k6 run - <k6.js
 ```
 
-Watch for the auto scale behavior on HPA:
+Watch for the autoscale behavior on HPA:
 
 ```sh
 kubectl get hpa
 ```
 
-Watch for AKS auto scaler:
+Watch for AKS autoscaler:
 
 ```sh
 kubectl describe configmap --namespace kube-system cluster-autoscaler-status
