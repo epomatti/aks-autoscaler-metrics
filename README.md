@@ -8,6 +8,10 @@ Observability and Auto Scaling for AKS with Terraform with the following logging
 - Monitoring Metrics Publisher
 - ContainerLogV2
 
+Container Insights live dashboard:
+
+![Metrics](.assets/metrics.png)
+
 ## Deploy
 
 ```sh
@@ -57,7 +61,7 @@ curl 'http://<CLUSTER_EXTERNAL_IP>:30000/api/icecream/5'
 
 ## Load Testing
 
-To load test it with K6:
+To load test it with K6 on Docker:
 
 ```sh
 docker run \
@@ -67,6 +71,18 @@ docker run \
   -e "K6_SLEEP=0" \
   -e "API=/api/icecream/factorial/33" \
   --rm -i grafana/k6 run - <k6.js
+```
+
+Or K6 with the binary release:
+
+```ps1
+$env:CLUSTER_EXTERNAL_IP="<EXTERNAL_IP>"
+$env:VUS=2000
+$env:API="/api/icecream/factorial/33"
+$env:DURATION="30s"
+$env:K6_SLEEP=0
+
+.\k6 run --vus 10 --duration 30s script.js
 ```
 
 Also with JMeter (I was having bandwidth issues with WSL for some reason):
