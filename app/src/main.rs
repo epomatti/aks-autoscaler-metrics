@@ -100,7 +100,7 @@ async fn get_fibonacci(path: web::Path<String>) -> Result<impl Responder> {
   Ok(web::Json(body))
 }
 
-fn fibonacci(n: u128) -> u128 {
+pub fn fibonacci(n: u128) -> u128 {
   match n {
     0 => 1,
     1 => 1,
@@ -127,4 +127,16 @@ async fn main() -> io::Result<()> {
   .bind(format!("{host}:{port}"))?
   .run()
   .await
+}
+
+#[cfg(test)]
+mod main_tests {
+
+  use super::*;
+
+  #[test]
+  fn fibonacci_test() {
+    let f = fibonacci(9);
+    assert_eq!(f, 55)
+  }
 }
