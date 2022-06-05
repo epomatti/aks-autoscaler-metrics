@@ -87,6 +87,8 @@ resource "azurerm_kubernetes_cluster" "default" {
   resource_group_name = azurerm_resource_group.default.name
   dns_prefix          = "cluster"
   node_resource_group = "k8s-aks-${local.workload_affix}"
+  kubernetes_version  = "1.23.5"
+
   oms_agent {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.default.id
   }

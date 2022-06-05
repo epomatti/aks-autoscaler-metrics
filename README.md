@@ -78,7 +78,7 @@ To load test it with K6 on Docker:
 ```sh
 docker run \
   -e "CLUSTER_EXTERNAL_IP=<EXTERNAL_IP>" \
-  -e "VUS=20" \
+  -e "VUS=10" \
   -e "API=/api/fibonacci/40" \
   -e "DURATION=30s" \
   -e "K6_SLEEP=0" \
@@ -89,7 +89,7 @@ Or K6 with the binary release:
 
 ```ps1
 $env:CLUSTER_EXTERNAL_IP="<EXTERNAL_IP>"
-$env:VUS=15
+$env:VUS=10
 $env:API="/api/fibonacci/40"
 $env:DURATION="600s"
 $env:K6_SLEEP=0
