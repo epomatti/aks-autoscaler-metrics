@@ -55,18 +55,30 @@ Service should be running on the external address:
 curl 'http://<CLUSTER_EXTERNAL_IP>:30000/api/icecream/5'
 ```
 
+## Load Testing
+
 To load test it with K6:
 
 ```sh
 docker run \
   -e "CLUSTER_EXTERNAL_IP=<EXTERNAL_IP>" \
-  -e "VUS=100" \
+  -e "VUS=2000" \
   -e "DURATION=30s" \
   -e "K6_SLEEP=0" \
   -e "API=/api/icecream/factorial/33" \
   --rm -i grafana/k6 run - <k6.js
 ```
 
+Also with JMeter (I was having bandwidth issues with WSL for some reason):
+
+Get a [JRE 11](https://adoptium.net/temurin/releases) and download [JMeter](https://jmeter.apache.org/download_jmeter.cgi);
+
+```ps1
+$env:Path += ";C:\Users\evand\Downloads\jdk-11.0.15+10-jre\bin"
+
+# On JMeter home
+.\bin\jmeter
+```
 
 ## App Development
 
