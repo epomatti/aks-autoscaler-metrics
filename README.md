@@ -1,4 +1,4 @@
-# AKS Metrics
+# AKS HPA Metrics
 
 Observability and Auto Scaling for AKS with Terraform with the following logging and metrics configuration:
 
