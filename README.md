@@ -2,11 +2,11 @@
 
 Observability and Auto Scaling for AKS with Terraform with the following logging and metrics configuration:
 
+- Container Insights
+- ContainerLogV2
 - Log Analytics Workspace
 - OMS Agent
-- Container Insights
 - Monitoring Metrics Publisher
-- ContainerLogV2
 
 Container Insights live dashboard:
 
