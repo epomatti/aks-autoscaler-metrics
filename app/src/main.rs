@@ -85,6 +85,28 @@ async fn get_ice_cream_factorial(path: web::Path<String>) -> Result<impl Respond
   Ok(web::Json(body))
 }
 
+#[derive(Serialize)]
+struct GetIceCreamFibonacciResponse {
+  icecreams: String,
+}
+
+#[get("/api/fibonacci/{nstr}")]
+async fn get_fibonacci(path: web::Path<String>) -> Result<impl Responder> {
+  let nstr: String = path.into_inner();
+  let n: u128 = nstr.parse().unwrap();
+  let product = fibonacci(n);
+  let results = product.to_string();
+  let body = GetIceCreamFactorialResponse { icecreams: results };
+  Ok(web::Json(body))
+}
+
+fn fibonacci(n: u128) -> u128 {
+  match n {
+    0 => 1,
+    1 => 1,
+    _ => fibonacci(n - 1) + fibonacci(n - 2),
+  }
+}
 
 // Server
 
@@ -100,6 +122,7 @@ async fn main() -> io::Result<()> {
       .service(get_ice_cream)
       .service(post_ice_cream)
       .service(get_ice_cream_factorial)
+      .service(get_fibonacci)
   })
   .bind(format!("{host}:{port}"))?
   .run()
