@@ -61,13 +61,6 @@ curl 'http://<CLUSTER_EXTERNAL_IP>:30000/api/icecream/5'
 
 That's it 👍 services should be ready for load testing.
 
----
-
-If required, quickly force image pull:
-
-```sh
-kubectl rollout restart deployment/icecream-deployment
-```
 
 ## Auto Scaling Load Testing
 
@@ -75,8 +68,6 @@ Check auto scaler status:
 
 ```
 kubectl describe configmap --namespace kube-system cluster-autoscaler-status
-
-kubectl get configmap -n kube-system cluster-autoscaler-status -o yaml
 
 AzureDiagnostics
 | where Category == "cluster-autoscaler"
@@ -87,34 +78,23 @@ To load test it with K6 on Docker:
 ```sh
 docker run \
   -e "CLUSTER_EXTERNAL_IP=<EXTERNAL_IP>" \
-  -e "VUS=10" \
   -e "API=/api/fibonacci/40" \
-  -e "DURATION=30s" \
-  -e "K6_SLEEP=0" \
+  -e "VUS=10" \
+  -e "DURATION=300s" \
+  -e "K6_SLEEP=1" \
   --rm -i grafana/k6 run - <k6.js
 ```
 
-Or K6 with the binary release:
+Watch for the auto scale behavior on HPA:
 
-```ps1
-$env:CLUSTER_EXTERNAL_IP="<EXTERNAL_IP>"
-$env:VUS=10
-$env:API="/api/fibonacci/40"
-$env:DURATION="600s"
-$env:K6_SLEEP=0
-
-.\k6 run k6.js
+```sh
+kubectl get hpa
 ```
 
-Also with JMeter (I was having bandwidth issues with WSL for some reason):
+Watch for AKS auto scaler:
 
-Get a [JRE 11](https://adoptium.net/temurin/releases) and download [JMeter](https://jmeter.apache.org/download_jmeter.cgi);
-
-```ps1
-$env:Path += ";C:\Users\evand\Downloads\jdk-11.0.15+10-jre\bin"
-
-# On JMeter home
-.\bin\jmeter
+```sh
+kubectl describe configmap --namespace kube-system cluster-autoscaler-status
 ```
 
 ## App Development
@@ -150,6 +130,14 @@ curl 'http://localhost:8080/api/icecream/5'
 ```sh
 docker build -t icecream .
 docker run -it -p 8080:8080 --rm --name icecream icecream 
+```
+
+### Kubernets Image Refresh
+
+If you upload a new image simply force a pull with this:
+
+```sh
+kubectl rollout restart deployment/icecream-deployment
 ```
 
 ## Reference
