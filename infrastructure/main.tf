@@ -27,6 +27,19 @@ variable "location" {
   sensitive   = false
 }
 
+variable "aks_version" {
+  description = "Kubernetes version"
+  type        = string
+  default     = "1.23.5"
+  sensitive   = false
+}
+
+variable "aks_auto_upgrade_channel" {
+  type      = string
+  default   = "rapid"
+  sensitive = false
+}
+
 variable "aks_vm_size" {
   description = "Kubernetes VM size"
   type        = string
@@ -87,8 +100,8 @@ resource "azurerm_kubernetes_cluster" "default" {
   resource_group_name       = azurerm_resource_group.default.name
   dns_prefix                = "cluster"
   node_resource_group       = "k8s-aks-${local.workload_affix}"
-  automatic_channel_upgrade = "rapid"
-  kubernetes_version        = "1.23.5"
+  automatic_channel_upgrade = var.aks_auto_upgrade_channel
+  kubernetes_version        = var.aks_version
 
   oms_agent {
     log_analytics_workspace_id = azurerm_log_analytics_workspace.default.id
