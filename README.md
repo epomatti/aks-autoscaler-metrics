@@ -59,17 +59,29 @@ Service should be running on the external address:
 curl 'http://<CLUSTER_EXTERNAL_IP>:30000/api/icecream/5'
 ```
 
-## Load Testing
+Quickly force image pull if required:
+
+```sh
+kubectl rollout restart deployment/icecream-deployment
+```
+
+## Auto Scaling Load Testing
+
+Check auto scaler status:
+
+```
+kubectl describe configmap --namespace kube-system cluster-autoscaler-status
+```
 
 To load test it with K6 on Docker:
 
 ```sh
 docker run \
   -e "CLUSTER_EXTERNAL_IP=<EXTERNAL_IP>" \
-  -e "VUS=2000" \
+  -e "VUS=20" \
+  -e "API=/api/fibonacci/40" \
   -e "DURATION=30s" \
   -e "K6_SLEEP=0" \
-  -e "API=/api/icecream/factorial/33" \
   --rm -i grafana/k6 run - <k6.js
 ```
 
@@ -77,9 +89,9 @@ Or K6 with the binary release:
 
 ```ps1
 $env:CLUSTER_EXTERNAL_IP="<EXTERNAL_IP>"
-$env:VUS=2000
-$env:API="/api/icecream/factorial/33"
-$env:DURATION="30s"
+$env:VUS=15
+$env:API="/api/fibonacci/40"
+$env:DURATION="600s"
 $env:K6_SLEEP=0
 
 .\k6 run k6.js
