@@ -100,7 +100,7 @@ async fn get_fibonacci(path: web::Path<String>) -> Result<impl Responder> {
   Ok(web::Json(body))
 }
 
-pub fn fibonacci(n: u128) -> u128 {
+fn fibonacci(n: u128) -> u128 {
   match n {
     0 => 1,
     1 => 1,
